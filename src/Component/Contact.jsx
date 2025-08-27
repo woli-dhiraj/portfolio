@@ -1,68 +1,103 @@
-import React from 'react';
-import contact from "../assets/contact.png"
+import React, { useRef } from "react";
+import emailjs from "emailjs-com";
+import { User, Mail, MessageSquare } from "lucide-react";
+import toast from "react-hot-toast";
 
 function Contact() {
+  const form = useRef();
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+
+    emailjs
+      .sendForm(
+        "service_rbrzddn",   
+        "template_d3btkbx",  
+        form.current,
+        "95IGjqCxyrWmuCvxx"   
+      )
+      .then(
+        () => {
+          toast.success(" Message Sent Successfully!", {
+            duration: 3000, 
+          });
+          e.target.reset();
+        },
+        (error) => {
+          toast.error(" Failed to send message. Try again.", {
+            duration: 3000,
+          });
+          console.error(error.text);
+        }
+      );
+  };
+
   return (
-    <>
-      <div className="contactContainer h-screen w-screen  flex justify-center items-center">
-        <div className="contactForm p-6 border-2 border-black rounded-xl bg-pink-100">
-          <form className="flex gap-6 w-[70vw] h-[70vh] justify-between items-center px-30">
-            <div className="left w-full flex flex-col justify-center items-start pt-20 h-full gap-4">
-                <h1 className="text-4xl font-bold  text-center font-mono">READY TO TALK</h1>
-                <img src={contact} alt="contact" className=' w-74' />
-
-            </div>
-           <div className="right w-full">
-            
-            <div className="field flex flex-col gap-2">
-              <label htmlFor="name" className="font-semibold">Name</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                placeholder="Enter your name"
-                className="border-2 border-black px-2 py-1"
-              />
-            </div>
-
-            
-            <div className="field flex flex-col gap-2">
-              <label htmlFor="email" className="font-semibold">Email</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="example@gmail.com"
-                className="border-2 border-black px-2 py-1 w-full"
-              />
-            </div>
-
-         
-            <div className="field flex flex-col gap-2">
-              <label htmlFor="message" className="font-semibold">Message</label>
-              <textarea
-                id="message"
-                name="message"
-                rows={5}
-                placeholder="Type your message..."
-                className="border-2 border-black px-2 py-1"
-              ></textarea>
-            </div>
-
-          
-            <div className="btn flex justify-center items-center">
-                <button
-              type="submit"
-              className="bg-black text-white px-4 cursor-pointer py-2 mt-4 rounded font-semibold hover:opacity-80"
-            >
-              Send Message
-            </button>
-            </div>
-           </div>
-          </form>
+    <section id="contact" className="w-full min-h-screen bg-white text-black py-20 px-6">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold">
+            Get in <span className="text-purple-600">Touch</span>
+          </h2>
+          <p className="text-gray-600 mt-3">
+            Have a project in mind or just want to say hi? Fill out the form below ✨
+          </p>
         </div>
+
+        <form
+          ref={form}
+          onSubmit={sendEmail}
+          className="bg-white shadow-2xl rounded-2xl p-8 space-y-6 border border-gray-100"
+        >
+          <div className="relative">
+            <User className="absolute top-3 left-3 text-gray-400" size={20} />
+            <input
+              type="text"
+              name="user_name"
+              placeholder="Your Name"
+              required
+              className="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-3 
+                         focus:outline-none focus:ring-2 focus:ring-purple-500
+                         hover:border-purple-400 transition"
+            />
+          </div>
+
+          <div className="relative">
+            <Mail className="absolute top-3 left-3 text-gray-400" size={20} />
+            <input
+              type="email"
+              name="user_email"
+              placeholder="your@email.com"
+              required
+              className="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-3 
+                         focus:outline-none focus:ring-2 focus:ring-purple-500
+                         hover:border-purple-400 transition"
+            />
+          </div>
+
+          <div className="relative">
+            <MessageSquare className="absolute top-3 left-3 text-gray-400" size={20} />
+            <textarea
+              name="message"
+              rows="5"
+              placeholder="Write your message..."
+              required
+              className="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-3 
+                         focus:outline-none focus:ring-2 focus:ring-purple-500
+                         hover:border-purple-400 transition"
+            ></textarea>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full cursor-pointer bg-gradient-to-r from-purple-600 to-purple-500 text-white py-3 rounded-lg font-medium
+                       hover:from-purple-700 hover:to-purple-600 shadow-lg hover:shadow-purple-300 transition-all"
+          >
+            🚀 Send Message
+          </button>
+        </form>
       </div>
-    </>
+    </section>
   );
 }
 

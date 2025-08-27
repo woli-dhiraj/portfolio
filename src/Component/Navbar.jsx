@@ -1,25 +1,84 @@
-import React from "react";
+import React, { useState } from "react";
+import { Menu, X } from "lucide-react";
 
 function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <>
-      <header className="h-[12vh] w-full flex justify-center items-center fixed top-2.5 [text-shadow:0px_0px_10px_white]
-">
-        <div
-          className="navbar bg-[rgba(0,0,0,0.2)] backdrop-blur-md  h-[90%] w-[80%] 
-        m-auto flex items-center rounded-4xl justify-between
-        px-10 py-3"
-        >
-          <div className="logo text-2xl font-bold font-mono">DHIRAJ</div>
-          <div className="navList flex list-none gap-10">
-            <li className="cursor-pointer hover:scale-105 duration-200 hover:text-purple-200">Home</li>
-            <li className="cursor-pointer hover:scale-105 duration-200 hover:text-purple-200">About</li>
-            <li className="cursor-pointer hover:scale-105 duration-200 hover:text-purple-200" >Contact</li>
-            <li className="cursor-pointer hover:scale-105 duration-200 hover:text-purple-200">Project</li>
-          </div>
+    <header className="w-full bg-white text-black sticky top-0 z-50 shadow-md">
+      <nav className="max-w-7xl mx-auto flex justify-between items-center px-6 md:px-12 py-4">
+        
+        {/* Logo */}
+        <div className="logo text-xl md:text-2xl font-semibold tracking-wider">
+          DHIRAJ
         </div>
-      </header>
-    </>
+
+        {/* Desktop Links */}
+        <ul className="hidden md:flex gap-8 text-sm font-medium">
+          <li className="cursor-pointer hover:text-purple-600 transition">
+            <a href="#home">Home</a>
+          </li>
+          <li className="cursor-pointer hover:text-purple-600 transition">
+            <a href="#about">About</a>
+          </li>
+          <li className="cursor-pointer hover:text-purple-600 transition">
+            <a href="#projects">Projects</a>
+          </li>
+          <li className="cursor-pointer hover:text-purple-600 transition">
+            <a href="#contact">Contact</a>
+          </li>
+        </ul>
+
+        {/* Mobile Hamburger */}
+        <button
+          className="md:hidden block text-black"
+          onClick={() => setIsOpen(true)}
+        >
+          <Menu size={28} />
+        </button>
+      </nav>
+
+      {/* Glassmorphism Mobile Menu */}
+      <div
+        className={`fixed top-6 right-6 w-64 h-auto rounded-2xl backdrop-blur-sm bg-white/30 shadow-lg p-6
+          transform transition-transform duration-300 ease-in-out z-50
+          ${isOpen ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"}`}
+      >
+        {/* Close Button (aligned top-right inside card) */}
+        <div className="flex justify-end">
+          <button
+            onClick={() => setIsOpen(false)}
+            className="text-black hover:text-purple-600 transition"
+          >
+            <X size={26} />
+          </button>
+        </div>
+
+        {/* Sidebar Links */}
+        <ul className="flex flex-col items-start gap-5 mt-4 text-lg font-medium text-black">
+          <li>
+            <a href="#home" onClick={() => setIsOpen(false)} className="hover:text-purple-600">Home</a>
+          </li>
+          <li>
+            <a href="#about" onClick={() => setIsOpen(false)} className="hover:text-purple-600">About</a>
+          </li>
+          <li>
+            <a href="#projects" onClick={() => setIsOpen(false)} className="hover:text-purple-600">Projects</a>
+          </li>
+          <li>
+            <a href="#contact" onClick={() => setIsOpen(false)} className="hover:text-purple-600">Contact</a>
+          </li>
+        </ul>
+      </div>
+
+      {/* Background Blur Overlay */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 backdrop-blur-[2px] bg-black/10 z-40"
+          onClick={() => setIsOpen(false)}
+        ></div>
+      )}
+    </header>
   );
 }
 
