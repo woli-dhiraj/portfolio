@@ -1,35 +1,40 @@
 import React, { useRef } from "react";
-import emailjs from "emailjs-com";
 import { User, Mail, MessageSquare } from "lucide-react";
 import toast from "react-hot-toast";
 
 function Contact() {
   const form = useRef();
 
-  const sendEmail = (e) => {
+  const sendEmail = async (e) => {
     e.preventDefault();
 
-    emailjs
-      .sendForm(
-        "service_rbrzddn",   
-        "template_d3btkbx",  
-        form.current,
-        "95IGjqCxyrWmuCvxx"   
-      )
-      .then(
-        () => {
-          toast.success(" Message Sent Successfully!", {
-            duration: 3000, 
-          });
-          e.target.reset();
-        },
-        (error) => {
-          toast.error(" Failed to send message. Try again.", {
-            duration: 3000,
-          });
-          console.error(error.text);
-        }
-      );
+    if (!form.current) return;
+
+    const formData = new FormData(form.current);
+    // append web3forms access key
+    formData.append("access_key", "a7e9bb81-6a18-4b6c-a6ab-2f010baaf776");
+    // optional: set a subject
+    formData.append("subject", "New message from portfolio contact form");
+
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      });
+
+      const json = await res.json();
+
+      if (json.success) {
+        toast.success("Message Sent Successfully!", { duration: 3000 });
+        form.current.reset();
+      } else {
+        toast.error("Failed to send message. Try again.", { duration: 3000 });
+        console.error("Web3Forms error:", json);
+      }
+    } catch (err) {
+      toast.error("Failed to send message. Try again.", { duration: 3000 });
+      console.error("Web3Forms fetch error:", err);
+    }
   };
 
   return (
